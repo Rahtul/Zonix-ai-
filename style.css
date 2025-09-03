@@ -1,53 +1,37 @@
-/* style.css for ZONIX proof page */
-:root{
-  --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364; --card:#0f1726;
-  --accent:#00ffcc; --accent-dark:#00cc99; --muted:#94a3b8;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;padding:0;
-  font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
-  background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
-  color:#e6eef8; display:flex;align-items:center;justify-content:center;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #001f3f, #003366);
+  color: white;
+  text-align: center;
 }
 
-/* Card */
-.card{
-  width:92%; max-width:680px;
-  background:rgba(7,11,20,0.55);
-  border:1px solid rgba(255,255,255,0.04);
-  border-radius:14px; padding:28px; text-align:center;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
-  backdrop-filter: blur(6px);
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.3);
 }
 
-/* Logo + badge */
-.logo{font-weight:800;font-size:20px;letter-spacing:0.6px}
-.badge{
-  display:inline-block;padding:6px 10px;border-radius:999px;background:#065f46;
-  font-size:12px;margin-left:8px;color:#baf7e8;
+h1 span {
+  color: #00ffcc;
 }
 
-/* Title glow */
-h1{font-size:20px;margin:12px 0 6px}
-h1{animation:glow 2000ms infinite alternate}
-@keyframes glow{
-  from{text-shadow:0 0 8px rgba(0,255,204,.12),0 0 18px rgba(0,255,204,.06)}
-  to{text-shadow:0 0 18px rgba(0,255,204,.22),0 0 36px rgba(0,255,204,.12)}
+button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: #00ffcc;
+  color: #001f3f;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-/* Ping button */
-.btn{
-  display:inline-block;margin-top:16px;padding:12px 20px;border-radius:12px;
-  background:linear-gradient(90deg,var(--accent),var(--accent-dark));
-  color:#042023;border:0;font-weight:700;cursor:pointer;
-  transition:transform .18s,filter .18s;
+button:hover {
+  background: #00ccaa;
 }
-.btn:hover{transform:translateY(-4px);filter:saturate(1.05)}
-
-/* Meta small */
-small{display:block;margin-top:12px;color:var(--muted);font-size:12px;opacity:.95}
-
-/* Responsive */
-@media(min-width:780px){ .card{padding:36px} h1{font-size:26px} }
