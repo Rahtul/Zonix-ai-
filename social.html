@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZONIX • Social</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <!-- Top Nav -->
+  <header class="nav">
+    <div class="brand">🚀 ZONIX Universe</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="social.html" class="active">Social</a>
+      <a href="store.html">Store</a>
+      <a href="alienverse.html">AlienVerse</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>👋 Vanakkam! ZONIX Social</h1>
+    <p class="muted">Inga neenga short posts share pannalaam. Data local-a (உங்க phone/localStorage) save aagum.</p>
+
+    <!-- Create Post -->
+    <section class="card">
+      <h2>✍️ Create Post</h2>
+      <textarea id="postText" rows="3" placeholder="Enna nenachuringa?"></textarea>
+      <div class="row">
+        <input id="postAuthor" type="text" placeholder="Name (optional)"/>
+        <button id="postBtn">Post</button>
+      </div>
+    </section>
+
+    <!-- Posts List -->
+    <section id="feed"></section>
+  </main>
+
+  <footer class="footer">© ZONIX • Social</footer>
+
+  <script>
+    // ---- Simple Social (LocalStorage) ----
+    const KEY = "zonix_posts_v1";
+    const feed = document.getElementById("feed");
+    const btn  = document.getElementById("postBtn");
+
+    // Seed few posts first time
+    function seed() {
+      const seedData = [
+        { id: 1, author: "Zonix Bot", text: "Welcome to ZONIX Social! 🚀", likes: 3, time: Date.now()-3600000 },
+        { id: 2, author: "Human", text: "Hi macha! Site super ah irukku 🤝", likes: 1, time: Date.now()-600000 }
+      ];
+      localStorage.setItem(KEY, JSON.stringify(seedData));
+    }
+
+    function readPosts() {
+      let data = localStorage.getItem(KEY);
+      if (!data) { seed(); data = localStorage.getItem(KEY); }
+      return JSON.parse(data);
+    }
+
+    function writePosts(arr) {
+      localStorage.setItem(KEY, JSON.stringify(arr));
+    }
+
+    function timeAgo(ts){
+      const m = Math.floor((Date.now()-ts)/60000);
+      if (m < 1) return "just now";
+      if (m < 60) return m+"m ago";
+      const h = Math.floor(m/60);
+      if (h < 24) return h+"h ago";
+      const d = Math.floor(h/24); return d+"d ago";
+    }
+
+    function render() {
+      const posts = readPosts().sort((a,b)=>b.time-a.time);
+      feed.innerHTML = "";
+      posts.forEach(p => {
+        const el = document.createElement("article");
+        el.className = "post card";
+        el.innerHTML = `
+          <div class="post-head">
+            <div class="avatar">${(p.author||"U").slice(0,1).toUpperCase()}</div>
+            <div>
+              <div class="author">${p.author||"Anonymous"}</div>
+              <div class="time">${timeAgo(p.time)}</div>
+            </div>
+          </div>
+          <p class="text">${p.text.replace(/</g,"&lt;")}</p>
+          <div class="actions">
+            <button data-like="${p.id}">❤️ ${p.likes||0}</button>
+            <button data-del="${p.id}">🗑️</button>
+          </div>
+        `;
+        feed.appendChild(el);
+      });
+    }
+
+    function addPost() {
+      const text = document.getElementById("postText").value.trim();
+      const author = document.getElementById("postAuthor").value.trim();
+      if (!text) return alert("Post text type pannu da macha 🙂");
+      const posts = readPosts();
+      const id = posts.length ? Math.max(...posts.map(p=>p.id))+1 : 1;
+      posts.push({ id, author, text, likes:0, time: Date.now() });
+      writePosts(posts);
+      document.getElementById("postText").value = "";
+      render();
+    }
+
+    feed.addEventListener("click", (e)=>{
+      const likeId = e.target.getAttribute("data-like");
+      const delId  = e.target.getAttribute("data-del");
+      if (likeId) {
+        const posts = readPosts();
+        const it = posts.find(p=>p.id==likeId);
+        it.likes = (it.likes||0)+1;
+        writePosts(posts); render();
+      }
+      if (delId) {
+        const posts = readPosts().filter(p=>p.id!=delId);
+        writePosts(posts); render();
+      }
+    });
+
+    btn.addEventListener("click", addPost);
+    render();
+  </script>
+</body>
+</html>
